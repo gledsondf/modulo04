@@ -1,7 +1,10 @@
 import React from 'react';
+import imageFile from './assets/logo.png';
 
 function App() {
-  return <h1>olá Raul</h1>
+  return <img src={imageFile} />
+  
+
 }
 
 export default App;

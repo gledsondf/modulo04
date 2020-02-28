@@ -1,8 +1,8 @@
 import React from 'react';
-import imageFile from './assets/logo.png';
+import TechList from './components/TechList';
 
 function App() {
-  return <img src={imageFile} />
+  return <TechList />
   
 
 }

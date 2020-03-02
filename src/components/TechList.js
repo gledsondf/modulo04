@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-
+import TechItem from './TechItem';
 class TechList extends Component {
 
   constructor(props){
     super(props);
     this.state = {
-      newTech: 'tese',
+      newTech: '',
       techs: [
         'Node.js',
         'ReactJs',
@@ -15,23 +15,55 @@ class TechList extends Component {
     }
     
   }
+//executado assim que o componente aparece em tela
+componentDidMount() {
+ const techs = localStorage.getItem('techs');
 
-  // handleInputChange = e => {
-  //   this.setState({newTech: e.target.value})
-  // }
-  // handleInputChange(e){
-  //   props.state.setState({newTech: e.target.value});
-  // }
+ if(techs) {
+   this.setState({techs: JSON.parse(techs)});
+ }
+}
+//executado sempre que houver alterações nas props ou estado
+//componentDidUpdate(prevProps, prevState) quando utilizado prevProps {
+componentDidUpdate(_, prevState) {
+  if(prevState.techs !== this.state.techs) {
+    localStorage.setItem('techs',  JSON.stringify(this.state.techs))
+  }
+}
+
+//executado quando o componente deixa de existir
+componentWillUnmount(){
+
+}
+handleInputChange = e => {
+  this.setState({ newTech: e.target.value});
+}
+
+handleSubmit = e => {
+  e.preventDefault();
+
+  this.setState({ techs: [ ... this.state.techs, this.state.newTech],
+  newTech: '' });
+}
+
+handleDelete = (tech) => {
+  this.setState({ techs: this.state.techs.filter(t => t !== tech)});
+}
   render() {
     return (
-      <>
-      <h1></h1>
+      <form onSubmit= {this.handleSubmit}>
+      <h1>{this.state.newTech}</h1>
       <ul>
-        {this.state.techs.map(tech => <li key={tech}>{tech}</li>)}
+        {this.state.techs.map(tech => <TechItem  key={tech} tech={tech} onDelete = {() => this.handleDelete(tech)} />)}
+      
       </ul>
-      <input type='text' />
-      <button onClick = {()=>this.props({newTech:'gledson botão'})}>{this.state.newTech}</button>
-      </>
+      <input 
+        type='text' 
+        onChange = {this.handleInputChange} 
+        value={this.state.newTech}
+       />
+      <button type='submit'>Enviar</button>
+      </form>
     );
   }
 }
